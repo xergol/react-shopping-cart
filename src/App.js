@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 import Cart from './components/Cart';
 import Filter from './components/Filter';
 import Products from './components/Products';
-import data from './data.json'
 import store from './store';
 import { Provider } from 'react-redux';
 
@@ -13,9 +12,6 @@ function App() {
 
   }
 
-  const [products, setProducts] = useState(data.products);
-  const [size, setSize] = useState("");
-  const [sort, setSort] = useState("");
   const [cartItems, setCartItems] = useState(JSON.parse(localStorage.getItem("cartItems")) ? JSON.parse(localStorage.getItem("cartItems")) : []);
 
   const createOrder = (order) => {
@@ -45,30 +41,6 @@ function App() {
     localStorage.setItem("cartItems", JSON.stringify(addedCardItems));
   }
 
-  const sortProducts = event => {
-    setSort(event.target.value);
-    const resProducts = products.slice().sort((a, b) =>
-      sort === "lowest" ?
-        a.price < b.price ? 1 : -1
-        : sort === "highest" ?
-          a.price > b.price ? 1 : -1
-          : a._id < b._id ? 1 : -1
-    )
-    setProducts(resProducts);
-  }
-
-  const filterProducts = event => {
-    if (event.target.value === "") {
-      setSize(event.target.value);
-      setProducts(data.products);
-    } else {
-      const filteredArray = data.products.filter(product => product.availableSizes.indexOf(event.target.value) >= 0)
-      setSize(event.target.value);
-      setProducts(filteredArray);
-    }
-  }
-
-
 
   return (
     <Provider store={store}>
@@ -79,8 +51,8 @@ function App() {
         <main>
           <div className="content">
             <div className="main">
-              <Filter count={products.length} size={size} sort={sort} filterProducts={filterProducts} sortProducts={sortProducts} />
-              <Products products={products} addToCart={addToCart} />
+              <Filter />
+              <Products addToCart={addToCart} />
             </div>
             <div className="sidebar">
               <Cart cartItems={cartItems} removeFromCart={removeFromCart} createOrder={createOrder} />
