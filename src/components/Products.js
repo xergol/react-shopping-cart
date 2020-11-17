@@ -93,5 +93,5 @@ function Products(props) {
     )
 }
 export default connect((state) => ({
-    products: state.products.items
+    products: state.products.filteredItems
 }), { fetchProducts })(Products)
